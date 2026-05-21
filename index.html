@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumen POS — Cloud Connected</title>
+    <title>Lumen POS — Firebase Connected</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -28,28 +28,27 @@
 
     <script type="text/babel">
         // ==========================================
-        // 1. INISIALISASI FIREBASE CLOUD DATABASE
+        // 1. INISIALISASI FIREBASE (Kofigurasi Anda)
         // ==========================================
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBsn2hxQVtZ7zibEddi6XYCi6ZGARttUJk",
-  authDomain: "point-of-sale-fd99a.firebaseapp.com",
-  databaseURL: "https://point-of-sale-fd99a-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "point-of-sale-fd99a",
-  storageBucket: "point-of-sale-fd99a.firebasestorage.app",
-  messagingSenderId: "265598617841",
-  appId: "1:265598617841:web:0d00b087cf98f687ef4150",
-  measurementId: "G-004CZ9S41Y"
-};
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsn2hxQVtZ7zibEddi6XYCi6ZGARttUJk",
+            authDomain: "point-of-sale-fd99a.firebaseapp.com",
+            databaseURL: "https://point-of-sale-fd99a-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "point-of-sale-fd99a",
+            storageBucket: "point-of-sale-fd99a.firebasestorage.app",
+            messagingSenderId: "265598617841",
+            appId: "1:265598617841:web:0d00b087cf98f687ef4150",
+            measurementId: "G-004CZ9S41Y"
+        };
         
-        // Cek agar tidak inisialisasi ganda
+        // Mencegah inisialisasi ganda
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
 
         // ==========================================
-        // 2. KOMPONEN ICON ANTI-CRASH 
+        // 2. KOMPONEN ICON (ANTI-CRASH)
         // ==========================================
         const Icon = ({ name, className }) => {
             if (!window.lucide || !window.lucide.icons[name]) return null;
@@ -74,7 +73,10 @@ const firebaseConfig = {
         const initialCustomers = [
             { initials: 'AW', name: 'Andra Wijaya', since: '12 Jan 2024', email: 'andra@mail.com', phone: '0812-3456-7890', total: 4250000, txCount: 28 },
             { initials: 'SP', name: 'Sinta Putri', since: '03 Feb 2024', email: 'sinta@mail.com', phone: '0813-9988-1122', total: 2980000, txCount: 19 },
-            { initials: 'BH', name: 'Bagus Hartono', since: '22 Nov 2023', email: 'bagus@mail.com', phone: '0821-7766-5544', total: 6720000, txCount: 41 }
+            { initials: 'BH', name: 'Bagus Hartono', since: '22 Nov 2023', email: 'bagus@mail.com', phone: '0821-7766-5544', total: 6720000, txCount: 41 },
+            { initials: 'ML', name: 'Maya Lestari', since: '18 Mei 2024', email: 'maya@mail.com', phone: '0857-2233-4455', total: 1540000, txCount: 12 },
+            { initials: 'RP', name: 'Reza Pratama', since: '04 Agu 2023', email: 'reza@mail.com', phone: '0811-3344-9988', total: 8910000, txCount: 53 },
+            { initials: 'DA', name: 'Dewi Anggraeni', since: '29 Mar 2024', email: 'dewi@mail.com', phone: '0852-1122-3344', total: 3320000, txCount: 22 }
         ];
 
         const formatRupiah = (num) => 'Rp ' + num.toLocaleString('id-ID').replace(/,/g, '.');
@@ -100,8 +102,8 @@ const firebaseConfig = {
                             </div>
                             <div>
                                 <h1 className="text-base font-bold text-slate-800 leading-tight">Lumen POS</h1>
-                                <p className="text-[11px] text-emerald-500 font-bold flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Firebase Connected
+                                <p className="text-[11px] text-emerald-500 font-bold flex items-center gap-1 mt-0.5">
+                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Firebase Active
                                 </p>
                             </div>
                         </div>
@@ -139,10 +141,15 @@ const firebaseConfig = {
                         <input type="text" placeholder="Cari..." className="bg-transparent border-none outline-none text-sm w-full text-slate-700" />
                     </div>
                     <div className="flex items-center gap-4 text-slate-500">
-                        <div className={`px-3 py-1 rounded-full text-xs font-bold border ${dbStatus ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'} flex items-center gap-1.5`}>
+                        <div className={`px-3 py-1.5 rounded-full text-[11px] font-bold border flex items-center gap-1.5 transition-colors ${dbStatus ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'}`}>
                             <Icon name={dbStatus ? 'wifi' : 'wifi-off'} className="w-3.5 h-3.5" />
-                            {dbStatus ? 'Cloud Sync Active' : 'Connecting DB...'}
+                            {dbStatus ? 'Connected to DB' : 'Connecting...'}
                         </div>
+                        <button className="hover:text-slate-800"><Icon name="moon" className="w-5 h-5" /></button>
+                        <button className="hover:text-slate-800 relative">
+                            <Icon name="bell" className="w-5 h-5" />
+                            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
                         <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold ml-2">AD</div>
                     </div>
                 </header>
@@ -196,7 +203,7 @@ const firebaseConfig = {
                         
                         <div className="flex gap-2 mb-4">
                             {categories.map((cat) => (
-                                <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeCategory === cat ? 'bg-slate-800 text-white shadow' : 'bg-white border border-slate-200 text-slate-600'}`}>{cat}</button>
+                                <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeCategory === cat ? 'bg-slate-800 text-white shadow' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}`}>{cat}</button>
                             ))}
                         </div>
 
@@ -254,11 +261,212 @@ const firebaseConfig = {
                             <div className="flex justify-between text-sm text-slate-500 mb-1"><span>Subtotal</span><span>{formatRupiah(subtotal)}</span></div>
                             <div className="flex justify-between text-sm text-slate-500 mb-2"><span>Pajak (11%)</span><span>{formatRupiah(tax)}</span></div>
                             <div className="flex justify-between text-base font-bold text-slate-800 pt-2 pb-4 border-t border-slate-200/60 mt-2">
-                                <span>Total Akhir</span><span>{formatRupiah(total)}</span>
+                                <span>Total Akhir</span><span className="text-blue-600">{formatRupiah(total)}</span>
                             </div>
-                            <button onClick={handlePay} disabled={cart.length === 0} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-medium py-3 rounded-xl transition-colors flex justify-between px-4 items-center shadow-md shadow-blue-600/20">
+                            <button onClick={handlePay} disabled={cart.length === 0} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-3 rounded-xl transition-colors flex justify-between px-4 items-center shadow-md shadow-blue-600/20">
                                 <span>Checkout Bayar</span><span>{formatRupiah(total)}</span>
                             </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Halaman Produk (Full UI)
+        function Products() {
+            return (
+                <div className="max-w-6xl mx-auto flex flex-col h-full space-y-6">
+                    <div className="flex justify-between items-end">
+                        <div>
+                            <h2 className="text-2xl font-semibold tracking-tight text-slate-800">Produk</h2>
+                            <p className="text-sm text-slate-500 mt-1">16 produk aktif di katalog</p>
+                        </div>
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                            <Icon name="plus" className="w-4 h-4" /> Tambah Produk
+                        </button>
+                    </div>
+
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col flex-1 overflow-hidden">
+                        <div className="p-4 border-b border-slate-100 flex gap-4">
+                            <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 flex-1 focus-within:border-blue-400">
+                                <Icon name="search" className="w-4 h-4 text-slate-400" />
+                                <input type="text" placeholder="Cari nama atau SKU..." className="text-sm outline-none w-full text-slate-700" />
+                            </div>
+                            <div className="border border-slate-200 rounded-lg px-3 py-2 flex items-center justify-between w-48 text-sm text-slate-600 cursor-pointer">
+                                <span>Semua kategori</span>
+                                <Icon name="chevron-down" className="w-4 h-4" />
+                            </div>
+                        </div>
+                        
+                        <div className="overflow-y-auto flex-1">
+                            <table className="w-full text-left">
+                                <thead className="bg-slate-50/50 sticky top-0 z-10 border-b border-slate-100">
+                                    <tr className="text-xs text-slate-500 font-medium">
+                                        <th className="px-6 py-4 font-medium">Produk</th>
+                                        <th className="px-6 py-4 font-medium text-center">Kategori</th>
+                                        <th className="px-6 py-4 font-medium">SKU</th>
+                                        <th className="px-6 py-4 font-medium text-right">Harga</th>
+                                        <th className="px-6 py-4 font-medium text-right">Stok</th>
+                                        <th className="px-6 py-4 font-medium text-right w-16"></th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
+                                    {initialProducts.map((p) => (
+                                        <tr key={p.id} className="hover:bg-slate-50/50 transition-colors group">
+                                            <td className="px-6 py-3">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-8 h-8 rounded-lg ${p.color}`}></div>
+                                                    <span className="font-medium text-slate-800">{p.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-3 text-center">
+                                                <span className="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md font-medium">{p.category}</span>
+                                            </td>
+                                            <td className="px-6 py-3 text-slate-500 text-xs">{p.sku}</td>
+                                            <td className="px-6 py-3 text-right font-medium text-slate-800">{formatRupiah(p.price)}</td>
+                                            <td className="px-6 py-3 text-right text-slate-600">{p.stock}</td>
+                                            <td className="px-6 py-3 text-right">
+                                                <button className="text-slate-400 hover:text-slate-800"><Icon name="more-horizontal" className="w-4 h-4" /></button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Halaman Pelanggan (Full UI)
+        function Customers() {
+            return (
+                <div className="max-w-6xl mx-auto flex flex-col h-full space-y-6 overflow-y-auto pb-8">
+                    <div className="flex justify-between items-end">
+                        <div>
+                            <h2 className="text-2xl font-semibold tracking-tight text-slate-800">Pelanggan</h2>
+                            <p className="text-sm text-slate-500 mt-1">Daftar pelanggan terdaftar</p>
+                        </div>
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                            <Icon name="plus" className="w-4 h-4" /> Pelanggan Baru
+                        </button>
+                    </div>
+
+                    <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-4 py-2.5 w-full md:w-96 focus-within:border-blue-400">
+                        <Icon name="search" className="w-4 h-4 text-slate-400" />
+                        <input type="text" placeholder="Cari nama atau email..." className="text-sm outline-none w-full text-slate-700" />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {initialCustomers.map((cust, i) => (
+                            <div key={i} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 hover:border-blue-200 transition-colors relative">
+                                <div className="absolute top-5 right-5 bg-slate-50 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded border border-slate-100">
+                                    {cust.txCount}x
+                                </div>
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center text-sm border border-blue-100">
+                                        {cust.initials}
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-slate-800 text-sm">{cust.name}</h4>
+                                        <p className="text-[11px] text-slate-500">Sejak {cust.since}</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-2 mb-4">
+                                    <div className="flex items-center gap-2 text-slate-500 text-xs">
+                                        <Icon name="mail" className="w-3.5 h-3.5" /> {cust.email}
+                                    </div>
+                                    <div className="flex items-center gap-2 text-slate-500 text-xs">
+                                        <Icon name="phone" className="w-3.5 h-3.5" /> {cust.phone}
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                                    <span className="text-[11px] text-slate-400 font-medium">Total belanja</span>
+                                    <span className="text-sm font-bold text-slate-800">{formatRupiah(cust.total)}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Halaman Statistik (Full UI)
+        function Analytics() {
+            return (
+                <div className="max-w-6xl mx-auto space-y-6 overflow-y-auto pb-8 h-full">
+                    <div>
+                        <h2 className="text-2xl font-semibold tracking-tight text-slate-800">Statistik Penjualan</h2>
+                        <p className="text-sm text-slate-500 mt-1">Insight performa toko Anda</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div className="flex justify-between items-start">
+                                <p className="text-sm font-medium text-slate-500">Pendapatan</p>
+                                <div className="p-1.5 bg-blue-50 text-blue-500 rounded-lg"><Icon name="trending-up" className="w-4 h-4" /></div>
+                            </div>
+                            <p className="text-2xl font-bold text-slate-800 mt-3">{formatRupiah(2584080)}</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div className="flex justify-between items-start">
+                                <p className="text-sm font-medium text-slate-500">Order Selesai</p>
+                                <div className="p-1.5 bg-blue-50 text-blue-500 rounded-lg"><Icon name="shopping-bag" className="w-4 h-4" /></div>
+                            </div>
+                            <p className="text-2xl font-bold text-slate-800 mt-3">15</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div className="flex justify-between items-start">
+                                <p className="text-sm font-medium text-slate-500">Rata-rata Order</p>
+                                <div className="p-1.5 bg-blue-50 text-blue-500 rounded-lg"><Icon name="percent" className="w-4 h-4" /></div>
+                            </div>
+                            <p className="text-2xl font-bold text-slate-800 mt-3">{formatRupiah(172272)}</p>
+                        </div>
+                        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                            <div className="flex justify-between items-start">
+                                <p className="text-sm font-medium text-slate-500">Pelanggan Unik</p>
+                                <div className="p-1.5 bg-blue-50 text-blue-500 rounded-lg"><Icon name="users" className="w-4 h-4" /></div>
+                            </div>
+                            <p className="text-2xl font-bold text-slate-800 mt-3">8</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                            <h3 className="text-base font-semibold text-slate-800 mb-6">Tren Penjualan Mingguan</h3>
+                            <div className="flex-1 flex flex-col justify-end min-h-[250px]">
+                                <div className="flex justify-between text-xs text-slate-500 mt-4 border-t border-slate-100 pt-3 px-2 font-medium">
+                                    <div className="text-center"><span>Sen</span><br/><span className="text-slate-800">4.2M</span></div>
+                                    <div className="text-center"><span>Sel</span><br/><span className="text-slate-800">5.1M</span></div>
+                                    <div className="text-center"><span>Rab</span><br/><span className="text-slate-800">4.8M</span></div>
+                                    <div className="text-center"><span>Kam</span><br/><span className="text-slate-800">6.2M</span></div>
+                                    <div className="text-center"><span>Jum</span><br/><span className="text-slate-800">7.4M</span></div>
+                                    <div className="text-center"><span>Sab</span><br/><span className="text-slate-800">9.1M</span></div>
+                                    <div className="text-center"><span>Min</span><br/><span className="text-slate-800">8.2M</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <h3 className="text-base font-semibold text-slate-800 mb-6">Per Kategori</h3>
+                            <div className="space-y-6">
+                                <div>
+                                    <div className="flex justify-between text-xs font-semibold text-slate-800 mb-2"><span>Beverage</span><span className="text-slate-500">25%</span></div>
+                                    <div className="w-full bg-slate-100 rounded-full h-1.5"><div className="bg-blue-600 h-1.5 rounded-full w-1/4"></div></div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between text-xs font-semibold text-slate-800 mb-2"><span>Bakery</span><span className="text-slate-500">26%</span></div>
+                                    <div className="w-full bg-slate-100 rounded-full h-1.5"><div className="bg-blue-600 h-1.5 rounded-full w-[26%]"></div></div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between text-xs font-semibold text-slate-800 mb-2"><span>Food</span><span className="text-slate-500">45%</span></div>
+                                    <div className="w-full bg-slate-100 rounded-full h-1.5"><div className="bg-blue-600 h-1.5 rounded-full w-[45%]"></div></div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between text-xs font-semibold text-slate-800 mb-2"><span>Dessert</span><span className="text-slate-500">4%</span></div>
+                                    <div className="w-full bg-slate-100 rounded-full h-1.5"><div className="bg-blue-600 h-1.5 rounded-full w-[4%]"></div></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -274,7 +482,7 @@ const firebaseConfig = {
                     <div className="flex justify-between items-end">
                         <div>
                             <h2 className="text-2xl font-semibold tracking-tight text-slate-800">Dashboard</h2>
-                            <p className="text-sm text-slate-500 mt-1">Sistem tersinkronisasi Firebase Database.</p>
+                            <p className="text-sm text-slate-500 mt-1">Statistik tersinkronisasi Firebase Database.</p>
                         </div>
                         <button onClick={() => setActiveTab('pos')} className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm transition-colors">
                             <Icon name="scan" className="w-4 h-4" /> Buka Kasir
@@ -315,23 +523,23 @@ const firebaseConfig = {
             );
         }
 
-        // Halaman Transaksi
+        // Halaman Transaksi (Tersambung Firebase)
         function Transactions({ transactions, isLoading }) {
             return (
                 <div className="max-w-6xl mx-auto flex flex-col h-full space-y-6">
                     <div className="flex justify-between items-end">
                         <div>
                             <h2 className="text-2xl font-semibold tracking-tight text-slate-800">Riwayat Transaksi</h2>
-                            <p className="text-sm text-slate-500 mt-1">Tarik data langsung dari Firebase Database.</p>
+                            <p className="text-sm text-slate-500 mt-1">Data ditarik real-time dari Firebase Database.</p>
                         </div>
                     </div>
 
                     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col flex-1 overflow-hidden">
                         <div className="overflow-y-auto flex-1">
                             {isLoading ? (
-                                <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                                <div className="flex flex-col items-center justify-center h-full text-slate-400 p-10">
                                     <Icon name="loader-2" className="w-8 h-8 animate-spin mb-4 text-blue-500" />
-                                    <p className="text-sm">Menarik data dari server...</p>
+                                    <p className="text-sm">Menghubungkan ke Database Cloud...</p>
                                 </div>
                             ) : (
                                 <table className="w-full text-left">
@@ -347,7 +555,7 @@ const firebaseConfig = {
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
                                         {transactions.length === 0 ? (
-                                            <tr><td colSpan="6" className="text-center py-8 text-slate-400">Belum ada transaksi di database.</td></tr>
+                                            <tr><td colSpan="6" className="text-center py-10 text-slate-400">Belum ada transaksi tersimpan di database.</td></tr>
                                         ) : transactions.map((tx) => (
                                             <tr key={tx.id} className="hover:bg-slate-50/50 transition-colors">
                                                 <td className="px-6 py-4 text-blue-600 text-xs font-bold">{tx.invoice}</td>
@@ -357,7 +565,7 @@ const firebaseConfig = {
                                                     <span className="border border-slate-200 text-slate-600 text-[10px] font-bold px-2 py-1 rounded uppercase">{tx.payment}</span>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className="bg-blue-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">{tx.status}</span>
+                                                    <span className="bg-emerald-100 text-emerald-700 text-[11px] font-semibold px-2.5 py-1 rounded-full">{tx.status}</span>
                                                 </td>
                                                 <td className="px-6 py-4 text-right font-bold text-slate-800">{formatRupiah(tx.total)}</td>
                                             </tr>
@@ -371,18 +579,18 @@ const firebaseConfig = {
             );
         }
 
-        // --- ROOT APP ---
+        // --- ROOT APP (FIREBASE LOGIC) ---
         function App() {
             const [activeTab, setActiveTab] = useState('pos');
             const [transactions, setTransactions] = useState([]);
             const [dbStatus, setDbStatus] = useState(false);
             const [isLoading, setIsLoading] = useState(true);
 
-            // Fetch data dari Firebase saat aplikasi dimuat
+            // Fetch data transaksi dari Firebase saat app dijalankan
             useEffect(() => {
                 const txRef = db.ref('transactions');
                 
-                // Listener realtime ke Database
+                // Listener realtime Firebase
                 txRef.on('value', (snapshot) => {
                     setDbStatus(true);
                     setIsLoading(false);
@@ -398,15 +606,16 @@ const firebaseConfig = {
                         setTransactions([]);
                     }
                 }, (error) => {
-                    console.error("Firebase Read Failed:", error);
+                    console.error("Firebase Connect Failed:", error);
                     setDbStatus(false);
                     setIsLoading(false);
                 });
 
+                // Cleanup listener ketika aplikasi ditutup
                 return () => txRef.off();
             }, []);
 
-            // Simpan Data ke Firebase
+            // Simpan Transaksi Baru ke Firebase saat Checkout
             const handleAddTransaction = (totalBayar) => {
                 const now = new Date();
                 const formattedDate = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -418,13 +627,13 @@ const firebaseConfig = {
                     payment: 'CASH',
                     status: 'Completed',
                     total: totalBayar,
-                    timestamp: Date.now() // Untuk sorting
+                    timestamp: Date.now() // Timestamp untuk sorting
                 };
                 
                 // PUSH KE FIREBASE DATABASE
                 db.ref('transactions').push(newTx)
-                    .then(() => alert("Berhasil disimpan ke Cloud!"))
-                    .catch(err => alert("Gagal menyimpan ke DB: " + err.message));
+                    .then(() => alert("Struk transaksi berhasil diunggah ke Firebase Cloud Database!"))
+                    .catch(err => alert("Gagal menyimpan ke Firebase: " + err.message));
             };
 
             return (
@@ -435,15 +644,10 @@ const firebaseConfig = {
                         <main className="flex-1 overflow-y-auto p-6 md:p-8 relative">
                             {activeTab === 'dashboard' && <Dashboard setActiveTab={setActiveTab} transactions={transactions} />}
                             {activeTab === 'pos' && <POS onCheckout={handleAddTransaction} />}
+                            {activeTab === 'products' && <Products />}
                             {activeTab === 'transactions' && <Transactions transactions={transactions} isLoading={isLoading} />}
-                            
-                            {['products', 'customers', 'analytics'].includes(activeTab) && (
-                                <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                                    <Icon name="layout" className="w-16 h-16 mb-4 text-slate-200" />
-                                    <h3 className="text-xl font-bold text-slate-700">Tampilan {activeTab}</h3>
-                                    <p className="text-sm mt-2 max-w-sm text-center">Silakan gunakan tab Dashboard, Kasir POS, dan Transaksi untuk menguji sistem Database Firebase.</p>
-                                </div>
-                            )}
+                            {activeTab === 'customers' && <Customers />}
+                            {activeTab === 'analytics' && <Analytics />}
                         </main>
                     </div>
                 </div>
